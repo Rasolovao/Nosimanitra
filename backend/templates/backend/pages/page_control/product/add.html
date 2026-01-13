@@ -1,0 +1,201 @@
+{% extends 'backend/layout/base.html' %}
+
+{% block content %}
+
+<div class="add-product">
+    <h1>Add Product</h1>
+
+    <hr>
+    <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label for="name" class="col-sm-3 col-form-label">Product Name</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="description" class="col-sm-3 col-form-label">Description</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe the product"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="price" class="col-sm-3 col-form-label">Price (€)</label>
+            <div class="col-sm-9">
+                <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" placeholder="0.00">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="reference" class="col-sm-3 col-form-label">Reference</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="reference" name="reference" placeholder="Unique reference code">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="brand" class="col-sm-3 col-form-label">Brand</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="brand" name="brand" placeholder="Brand name">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="category" class="col-sm-3 col-form-label">Category</label>
+            <div class="col-sm-9">
+                <div class="select-wrapper">
+                    <select class="form-control custom-select" id="category" name="category" required>
+                        <option value="">Select category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="select-arrow"></span>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="form-group row">
+            <label for="subcategory" class="col-sm-3 col-form-label">Subcategory</label>
+            <div class="col-sm-9">
+                <div class="select-wrapper">
+                    <select class="form-control custom-select" id="subcategory" name="subcategory" required>
+                        <option value="">Select subcategory</option>
+                        {% for subcategory in subcategories %}
+                            <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
+                        {% empty %}
+                            <option value="" disabled>No subcategories available</option>
+                        {% endfor %}
+                    </select>
+                    <span class="select-arrow"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="monthly_daily_deal" class="col-sm-3 col-form-label">Monthly/Daily Deal</label>
+            <div class="col-sm-9 d-flex align-items-center">
+                <input type="checkbox" id="monthly_daily_deal" name="monthly_daily_deal" class="form-check-input me-2">
+                <label for="monthly_daily_deal" class="form-check-label">Mark as Monthly/Daily Deal</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="description_is_promotion" class="col-sm-3 col-form-label">Description is Promotion</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" id="description_is_promotion" name="description_is_promotion" rows="2" placeholder="Describe the promotion"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="image1" class="col-sm-3 col-form-label">Product Image 1</label>
+            <div class="col-sm-9">
+                <input type="file" class="form-control-file" id="image1" name="image1" accept="image/*">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="image2" class="col-sm-3 col-form-label">Product Image 2</label>
+            <div class="col-sm-9">
+                <input type="file" class="form-control-file" id="image2" name="image2" accept="image/*">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="image3" class="col-sm-3 col-form-label">Product Image 3</label>
+            <div class="col-sm-9">
+                <input type="file" class="form-control-file" id="image3" name="image3" accept="image/*">
+            </div>
+        </div>
+
+
+        <div class="">
+            <button class="btn-classic" type="submit">Save Product</button>
+            <a class="btn-classic" href="{% url 'product' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('category');
+        const subcategorySelect = document.getElementById('subcategory');
+        const allSubcategories = subcategorySelect.innerHTML; // Store all subcategories initially
+
+        function filterSubcategories() {
+            const selectedCategoryId = categorySelect.value;
+            subcategorySelect.innerHTML = ''; // Clear current subcategories
+
+            // Add the current product's subcategory if it belongs to the selected category
+            const productSubcategoryId = "{{ product.subcategory.id }}";
+            const productSubcategoryName = "{{ product.subcategory }}";
+            const productSubcategoryCategoryId = "{{ product.subcategory.category.id }}";
+
+            if (selectedCategoryId === productSubcategoryCategoryId) {
+                const option = document.createElement('option');
+                option.value = productSubcategoryId;
+                option.textContent = productSubcategoryName;
+                subcategorySelect.appendChild(option);
+            }
+
+            {% for subcategory in subcategories %}
+                if ("{{ subcategory.category.id }}" === selectedCategoryId && "{{ subcategory.id }}" !== productSubcategoryId) {
+                    const option = document.createElement('option');
+                    option.value = "{{ subcategory.id }}";
+                    option.textContent = "{{ subcategory.name }}";
+                    subcategorySelect.appendChild(option);
+                }
+            {% endfor %}
+        }
+
+        // Initial filtering when the page loads
+        filterSubcategories();
+
+        // Add event listener for category change
+        categorySelect.addEventListener('change', filterSubcategories);
+    });
+</script>
+
+
+<style>
+    /* Dropdown arrow styling */
+    .select-wrapper {
+        position: relative;
+        display: block;
+    }
+    
+    .select-wrapper select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding-right: 30px; /* Space for the arrow */
+    }
+    
+    .select-arrow {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 8px solid #555;
+        pointer-events: none;
+    }
+    
+    /* Additional styling for select elements */
+    .custom-select {
+        background-color: white;
+        cursor: pointer;
+    }
+    
+    /* Remove default arrow in IE */
+    select::-ms-expand {
+        display: none;
+    }
+</style>
+
+{% endblock %}

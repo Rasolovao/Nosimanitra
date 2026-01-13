@@ -1,0 +1,20 @@
+{% extends 'backend/layout/base.html' %}
+
+{% block content %}
+
+<h1>Nav bar control</h1>
+　　<h2>Change Navbar Style</h2>
+    <form action="{% url 'navbar_control' %}" method="post">
+        {% csrf_token %}
+        <select name="navbar_style">
+            {% for style_value, style_name in navbar_styles %}
+                <option value="{{ style_value }}" {% if config.navbar_style == style_value %}selected{% endif %}>{{ style_name }}</option>
+            {% endfor %}
+        </select>
+        <hr>
+        <button class="btn-classic" type="submit">Submit</button>
+    </form>
+
+
+
+{% endblock %}

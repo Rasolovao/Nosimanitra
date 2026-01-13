@@ -1,0 +1,114 @@
+{% extends 'client/base.html' %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      {% include 'client/carousel.html'　with images=productImages  %}
+    </div>
+    <div class="col-md-6">
+      <h1>{{ product.name }}</h1>
+      <div class="d-flex align-items-center mb-3 gap-3">
+        <p><strong>Référence:</strong> {{ product.reference }}</p>
+        <p><strong>Marque:</strong> {{ product.brand }}</p>
+        <p><strong>Catégorie:</strong> {{ product.category }}
+      </div>
+      <hr>
+      <div class="d-flex align-items-center mb-3 gap-3 ">
+        <span> <s>{{ product.price|add:"-200" }}
+ </s></span>
+        <span class="fs-2 mb-0"> {{ product.price }} Ar </span>
+        <span class="bg-danger text-white px-2 py-1"> Économisez 200 Ar</span>
+      </div>
+      <p class="px-2 py-1 d-inline-block" style="background-color: aliceblue;">500 produits en stock</p>
+      <hr>
+
+      <div class="d-flex flex-column align-items-center">
+        <div>
+          <!-- Quantity Controls -->
+          <div class="d-flex justify-content gap-3 align-items-center">
+            <div class="input-group" style="width: 130px;">
+              <button class="btn btn-outline-secondary" hx-post="/cart/update/{{ product.id }}"
+                hx-vals='{"quantity": -1}'>-</button>
+              <input type="text" class="form-control text-center" value="1" aria-label="Quantity" readonly>
+              <button class="btn btn-outline-secondary" hx-post="/cart/update/{{ product.id }}"
+                hx-vals='{"quantity": 1}'>+</button>
+            </div>
+
+            <!-- Remove Button -->
+            <button class="btn btn-primary btn-sm" hx-post="/cart/add/{{ product.id }}" hx-target="#cart-count"
+              hx-swap="innerHTML"><i class="fas fa-shopping-cart"></i> Acheter</button>
+          </div>
+          <div class="container my-4">
+
+            <p>{{ product.description }}</p>
+            <h4 class="text-uppercase fw-bold text-primary">
+              <i class="bi bi-shield-check"></i> Informations
+            </h4>
+            <p class="mb-2">
+              <strong><i class="bi bi-question-circle"></i> Besoin d'aide :</strong> Contactez-nous au<br>
+              <i class="bi bi-whatsapp text-success"></i> <span class="text-success">WhatsApp 034 57 999 54</span>
+            </p>
+
+            <h5 class="text-uppercase fw-bold mt-4 text-primary">
+              <i class="bi bi-credit-card"></i> Paiement
+            </h5>
+            <p><i class="bi bi-lock-fill"></i> Moyens de paiement sécurisés</p>
+
+            <h5 class="text-uppercase fw-bold mt-4 text-primary">
+              <i class="bi bi-truck"></i> Livraison
+            </h5>
+            <p>Modalités de livraison :</p>
+
+            <ul class="list-group mb-3">
+              <li class="list-group-item">
+                <strong><i class="bi bi-shop"></i> Retrait en magasin :</strong>
+                Présentez-vous au service de la livraison avec votre facture
+              </li>
+              <li class="list-group-item">
+                <strong><i class="bi bi-box-seam"></i> Livraison :</strong>
+                <ul class="mt-2">
+                  <li><i class="bi bi-clock"></i> Commandes passées avant 12:00, livraison le jour même</li>
+                  <li><i class="bi bi-clock"></i> Commandes passées après 12:00, livraison le lendemain</li>
+                  <li><i class="bi bi-calendar-x"></i> Livraison tous les jours, sauf dimanche après-midi</li>
+                </ul>
+              </li>
+              <li class="list-group-item">
+                <strong><i class="bi bi-geo-alt"></i> Retrait en point relais :</strong>
+                Commande disponible le lendemain (service gratuit)
+              </li>
+              <li class="list-group-item">
+                <strong><i class="bi bi-person-lines-fill"></i> Livraison en province :</strong>
+                Un commercial prendra contact avec vous.
+              </li>
+              <li class="list-group-item">
+                <strong><i class="bi bi-cash-coin"></i> Conditions :</strong>
+                <ul class="mt-2">
+                  <li>Panier minimum pour une livraison : <strong>50 000 Ar</strong></li>
+                  <li>Coût de la livraison : <strong>10 000 Ar</strong></li>
+                  <li>Livraison offerte dès <strong>100 000 Ar</strong> d'achats</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  Similaires produits
+   <div class="product-grid">
+    {% for product in products %}
+      {% include 'client/productCards.html' with product=product %}
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+{% endblock %}

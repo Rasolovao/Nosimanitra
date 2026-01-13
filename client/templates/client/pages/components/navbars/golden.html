@@ -1,0 +1,310 @@
+  <style>
+        /* New Aqua/Teal Custom Colors */
+        :root {
+            --color-aqua-primary: #00A896; /* Vibrant Teal/Aqua */
+            --color-aqua-secondary: #028090; /* Darker Teal */
+            --color-text-dark: #1f2937;
+        }
+
+        .bg-aqua-primary {
+            background-color: var(--color-aqua-primary) !important;
+        }
+        .bg-aqua-secondary {
+            background-color: var(--color-aqua-secondary) !important;
+        }
+        .text-aqua-primary {
+            color: var(--color-aqua-primary) !important;
+        }
+
+        /* Top Bar Styling */
+        .top-bar-link {
+            transition: opacity 0.2s;
+        }
+        .top-bar-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Navbar Styling */
+        .navbar-brand-custom {
+            font-weight: 800;
+            color: var(--color-aqua-secondary) !important; 
+            letter-spacing: -0.05em;
+            font-size: 1.8rem;
+        }
+        
+        /* Account & Cart Link Styling */
+        .main-nav-link {
+            color: var(--color-text-dark) !important;
+            transition: color 0.2s, transform 0.2s;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .main-nav-link:hover {
+            color: var(--color-aqua-primary) !important;
+        }
+
+        /* Search Bar Styling - Prominent and wide */
+        .search-form {
+            display: flex;
+            width: 100%;
+        }
+        .search-input {
+            flex-grow: 1;
+            border-radius: 2rem 0 0 2rem !important; /* Fully rounded left side */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-color: #ced4da !important;
+            transition: all 0.3s;
+            border-right: 0 !important; 
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 0.15rem rgba(0, 168, 150, 0.4); /* Aqua ring */
+            border-color: var(--color-aqua-primary) !important;
+            border-right: 0 !important; 
+        }
+        .search-button {
+            background-color: var(--color-aqua-primary) !important;
+            border-color: var(--color-aqua-primary) !important;
+            color: white !important;
+            font-weight: 600;
+            border-radius: 0 2rem 2rem 0 !important; /* Fully rounded right side */
+            transition: background-color 0.2s;
+            border-left: 0 !important; 
+        }
+        .search-button:hover {
+            background-color: var(--color-aqua-secondary) !important;
+            border-color: var(--color-aqua-secondary) !important;
+        }
+
+        /* Category Navbar Styling */
+        .category-nav-link {
+            color: white !important;
+            font-weight: 600;
+            font-size: 0.95rem; 
+            padding: 0.75rem 1rem !important;
+            transition: background-color 0.2s;
+            border-radius: 0.25rem;
+        }
+        .category-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white !important; 
+        }
+        .category-dropdown-menu {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Offcanvas for Mobile */
+        .offcanvas-custom {
+            width: 85%; /* Slightly better for full-screen feel */
+        }
+        
+    </style>
+
+<!-- NAVIGATION SYSTEM -->
+<header>
+    <!-- TOP BAR (Light Gray) -->
+    <div class="bg-light border-bottom d-none d-md-block">
+        <div class="container py-1 d-flex justify-content-between align-items-center">
+            <small class="text-muted text-truncate">
+                Livraison gratuite à Madagascar pour toutes les commandes | Découvrez notre nouveau programme de fidélité !
+            </small>
+            <div class="d-flex flex-row gap-3">
+                <a href="#" class="text-decoration-none text-muted small top-bar-link">Contactez-nous: +261 32 77 531 69 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR (Logo, Search, Account/Cart) -->
+    <nav class="navbar navbar-expand-lg bg-white py-3">
+        <div class="container">
+            
+            <!-- Logo -->
+            <a class="navbar-brand navbar-brand-custom" href="/">
+                Aquatiako 1
+            </a>
+
+            <!-- Mobile Menu Toggle (Triggers Offcanvas) -->
+            <button class="navbar-toggler p-2 d-lg-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <i class="fas fa-bars fa-lg text-aqua-primary"></i>
+            </button>
+            
+            <!-- Desktop Search Bar (Wide and prominent) -->
+            <div class="d-none d-lg-flex flex-grow-1 mx-5" style="max-width: 600px;">
+                <form class="search-form" method="get" action="{% url 'filter_products' %}">
+                    <input
+                        class="form-control search-input"
+                        type="search"
+                        name="search"
+                        placeholder="Rechercher des poissons, filtres, leurres..."
+                        aria-label="Search"
+                        list="search-suggestions-desktop"
+                        onkeyup="getSuggestions(this.value, 'search-suggestions-desktop')"
+                    >
+                    <button class="btn search-button" type="submit">
+                        <i class="fas fa-search me-1"></i> Rechercher
+                    </button>
+                </form>
+                <datalist id="search-suggestions-desktop"></datalist>
+            </div>
+
+            <!-- Account & Cart Icons (Desktop) -->
+            <div class="d-none d-sm-flex align-items-center gap-4">
+                <a href="#" class="main-nav-link d-flex flex-column align-items-center">
+                    
+                </a>
+                <a href="#" class="main-nav-link position-relative d-flex flex-column align-items-center">
+                    
+                </a>
+            </div>
+            
+            <!-- Mobile Account/Cart Icons (Visible only on small screens) -->
+            <div class="d-flex d-sm-none align-items-center gap-3 me-2">
+                <a href="#" class="main-nav-link">
+                    <i class="fas fa-user fa-lg"></i> 
+                </a>
+                <a href="#" class="main-nav-link position-relative">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span class="position-absolute translate-middle badge rounded-pill bg-danger" style="top: -5px; right: -5px; font-size: 0.65rem;">
+                        3
+                    </span>
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- CATEGORY NAVBAR (Accent Bar) -->
+    <nav class="navbar navbar-expand-lg bg-aqua-secondary shadow-sm">
+        <div class="container d-flex justify-content-center">
+            <!-- Desktop Category Links -->
+            <ul class="navbar-nav d-none d-lg-flex gap-3">
+                {% for category in categories %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle category-nav-link" href="#" id="categoryDropdown{{ category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ category.name }}
+                    </a>
+                    <ul class="dropdown-menu category-dropdown-menu" aria-labelledby="categoryDropdown{{ category.id }}">
+                        {% if category.subcategories.exists %}
+                          <li>
+                            <a class="dropdown-item fw-bold text-aqua-primary" href="{% url 'filter_products' %}?filters={{ category.name|urlencode }}">
+                              Toute catégorie
+                            </a>
+                          </li>
+                          <li><hr class="dropdown-divider"></li>
+                          {% for subcategory in category.subcategories.all %}
+                          <li>
+                            <a class="dropdown-item" href="{% url 'filter_products' %}?filters={{ subcategory.name|urlencode }}">
+                              {{ subcategory.name }}
+                            </a>
+                          </li>
+                          {% endfor %}
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+</header>
+<script>
+    function getSuggestions(value, datalistId) {
+        if (value.length < 2) {
+            document.getElementById(datalistId).innerHTML = '';
+            return;
+        }
+        fetch(`/api/product-search-suggestions/?search=${value}`)
+            .then(response => response.json())
+            .then(data => {
+                const suggestions = data.map(item => `<option value="${item}">`).join('');
+                document.getElementById(datalistId).innerHTML = suggestions;
+            });
+    }
+</script>
+
+<!-- MOBILE MENU (Bootstrap Offcanvas) -->
+<div class="offcanvas offcanvas-start bg-white offcanvas-custom" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title navbar-brand-custom" id="offcanvasNavbarLabel">Aquatiako Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        
+        <!-- Mobile Search Bar (Full width) -->
+        <form class="search-form mb-4" method="get" action="{% url 'filter_products' %}">
+            <input
+                class="form-control search-input"
+                type="search"
+                name="search"
+                placeholder="Rechercher des produits..."
+                aria-label="Search"
+                list="search-suggestions-mobile"
+                onkeyup="getSuggestions(this.value, 'search-suggestions-mobile')"
+            >
+            <button class="btn search-button" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        <datalist id="search-suggestions-mobile"></datalist>
+        
+        <!-- --- Gemini API Feature: Search Inspiration (Styled with new primary color) --- -->
+        <h6 class="text-secondary fw-semibold mt-4 mb-3">Besoin d'inspiration ?</h6>
+        <div class="card p-3 mb-4 border-2" style="border-color: var(--color-aqua-primary) !important; background-color: #f0fdfa;">
+            <p class="small text-muted mb-2">Décrivez votre envie (ex: "cadeau pour enfant passionné de nature") et laissez notre IA vous suggérer des termes de recherche précis.</p>
+            <div class="input-group mb-2">
+                <input type="text" id="inspiration-query" class="form-control form-control-sm" placeholder="Ex: poisson d'eau douce facile à élever..." aria-label="Query">
+                <button class="btn btn-sm" style="background-color: var(--color-aqua-primary); color: white;" id="generate-inspiration-btn" type="button">
+                    ✨ Idées
+                    <span id="inspiration-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div id="inspiration-results" class="mt-2 small">
+                <!-- LLM results will go here -->
+            </div>
+        </div>
+        <!-- ----------------------------------------------- -->
+
+
+        <!-- Mobile Main Links -->
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-4">
+            <li class="nav-item border-top">
+                <a class="nav-link py-3 text-lg text-aqua-secondary" href="#"><i class="fas fa-user me-2"></i> Mon compte</a>
+            </li>
+            <li class="nav-item border-top border-bottom">
+                <a class="nav-link py-3 text-lg text-aqua-secondary" href="#"><i class="fas fa-shopping-basket me-2"></i> Mon panier</a>
+            </li>
+        </ul>
+        
+        <!-- Mobile Category Links (Accordion) -->
+        <h6 class="text-secondary fw-semibold mt-4 mb-3">Catégories de Produits</h6>
+        <div class="accordion accordion-flush" id="mobileCategoryAccordion">
+            {% for category in categories %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ category.id }}">
+                    <button class="accordion-button collapsed text-aqua-secondary fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ category.id }}" aria-expanded="false" aria-controls="collapse{{ category.id }}">
+                        {{ category.name }}
+                    </button>
+                </h2>
+                <div id="collapse{{ category.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ category.id }}" data-bs-parent="#mobileCategoryAccordion">
+                    <div class="accordion-body p-0">
+                        {% if category.subcategories.exists %}
+                            <a class="dropdown-item py-2 ps-4 fw-bold text-aqua-primary" href="{% url 'filter_products' %}?filters={{ category.name|urlencode }}">
+                                Toute catégorie
+                            </a>
+                            {% for subcategory in category.subcategories.all %}
+                            <a class="dropdown-item py-2 ps-4" href="{% url 'filter_products' %}?filters={{ subcategory.name|urlencode }}">
+                                {{ subcategory.name }}
+                            </a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>

@@ -1,0 +1,18 @@
+{% extends 'client/base.html' %}
+
+{% block content %}
+<h1>Bienvenue à Aquatiako</h1>
+
+{% include 'client/carousel.html' with image=images %}
+
+<div class="mt-4">
+  {% include 'client/categoryBanner.html' %}
+  <h2>Produits</h2>
+  <div class="container product-grid">
+    {% for product in products %}
+      {% include 'client/productCards.html' with product=product %}
+    {% endfor %}
+  </div>
+  {% include 'client/dynamicBannar.html' %}
+</div>
+{% endblock %}

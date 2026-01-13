@@ -1,0 +1,35 @@
+ .product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  padding: 8px;
+}
+
+.card {
+  max-width: 160px;
+  height: 260px; /* fixed height to keep cards short */
+  margin: auto;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+  height: 100px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 8px;
+  font-size: 0.8rem;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.input-group-sm {
+  font-size: 0.75rem;
+}

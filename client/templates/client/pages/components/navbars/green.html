@@ -1,0 +1,435 @@
+ <style>
+        /* Custom Colors */
+        .bg-navy-dark {
+            background-color: #033d76 !important;
+        }
+        .bg-navy-light {
+            background-color: #0366c9 !important;
+        }
+        .text-white-accent {
+            color: #fefefe;
+        }
+
+        /* Main Navbar Styling */
+        .navbar-brand-custom {
+            font-weight: 700;
+            color: #033d76 !important; /* navy-dark */
+            letter-spacing: -0.025em;
+            font-size: 1.5rem;
+        }
+        
+        /* Account & Cart Link Styling */
+        .main-nav-link {
+            color: #033d76 !important; /* navy-dark */
+            transition: color 0.2s, transform 0.2s;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .main-nav-link:hover {
+            color: #0366c9 !important; /* navy-light */
+        }
+        
+        /* Search Bar Styling */
+        .search-form {
+            display: flex;
+            width: 100%;
+        }
+        .search-input {
+            flex-grow: 1; /* Ensures input takes up remaining space */
+            border-radius: 0.5rem 0 0 0.5rem !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+            /* Remove right border to merge with button */
+            border-right: 0 !important; 
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 0.25rem rgba(3, 102, 201, 0.25); /* navy-light ring */
+            border-color: #0366c9 !important; /* navy-light border */
+            /* Ensure the right border stays hidden on focus */
+            border-right: 0 !important; 
+        }
+        .search-button {
+            background-color: #0366c9 !important; /* navy-light */
+            border-color: #0366c9 !important;
+            color: white !important;
+            font-weight: 600;
+            border-radius: 0 0.5rem 0.5rem 0 !important;
+            transition: background-color 0.2s;
+            /* Remove left border to merge with input */
+            border-left: 0 !important; 
+        }
+        .search-button:hover {
+            background-color: #033d76 !important; /* navy-dark */
+            border-color: #033d76 !important;
+        }
+
+        /* Category Navbar Styling */
+        .category-link {
+            color: white !important;
+            font-weight: 500;
+            font-size: 0.875rem; 
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+            transition: color 0.2s;
+        }
+        .category-link:hover {
+            color: #fefefe !important; 
+        }
+        .category-dropdown-menu {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .category-dropdown-item {
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Offcanvas Customization */
+        .offcanvas-custom {
+            width: 100%;
+        }
+        
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION SYSTEM -->
+<header>
+    <!-- TOP BAR -->
+    <div class="bg-navy-dark text-white d-none d-md-block">
+        <div class="container py-2 d-flex justify-content-between align-items-center">
+            <small class="text-truncate">
+                Livraison gratuite à Madagascar pour toutes les commandes | Découvrez notre nouveau programme de fidélité !
+            </small>
+            <div class="d-flex flex-row space-x-4">
+                <a href="#" class="text-decoration-none text-white small top-bar-link">Inscrivez-vous</a>
+                <a href="#" class="text-decoration-none text-white small top-bar-link">Récompenses</a>
+                <a href="#" class="text-decoration-none text-white small top-bar-link">Contactez-nous</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR (Logo, Search, Account/Cart) -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm border-bottom">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand navbar-brand-custom" href="#">
+                Aquatiako
+            </a>
+
+            <!-- Mobile Menu Toggle (Triggers Offcanvas) -->
+            <button class="navbar-toggler p-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <i class="fas fa-bars main-nav-link"></i>
+            </button>
+            
+            <!-- Desktop Search Bar (Centered on desktop, Hidden on small screens) -->
+            <div class="d-none d-lg-flex w-100 mx-5" style="max-width: 500px;">
+                <form class="search-form" method="get" action="{% url 'filter_products' %}">
+                    <input
+                        class="form-control search-input"
+                        type="search"
+                        name="search"
+                        placeholder="Rechercher des produits..."
+                        aria-label="Search"
+                    >
+                    <button class="btn search-button" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Account & Cart Icons (Desktop) -->
+            <div class="d-none d-sm-flex align-items-center gap-4">
+                <a href="#" class="main-nav-link">
+                    <i class="fas fa-user fa-lg"></i> 
+                    <span class="d-none d-md-inline small">Mon compte</span>
+                </a>
+                <a href="#" class="main-nav-link position-relative">
+                    <i class="fas fa-shopping-basket fa-lg"></i>
+                    <span class="d-none d-md-inline small">Panier</span>
+                    <!-- Mock Cart Count -->
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                        3
+                    </span>
+                </a>
+            </div>
+            
+            <!-- Mobile Account/Cart Icons (Visible only on small screens) -->
+            <div class="d-flex d-sm-none align-items-center gap-3 me-2">
+                <a href="#" class="main-nav-link">
+                    <i class="fas fa-user fa-lg"></i> 
+                </a>
+                <a href="#" class="main-nav-link position-relative">
+                    <i class="fas fa-shopping-basket fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                        3
+                    </span>
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- CATEGORY NAVBAR (Primary Navigation Links) -->
+    <nav class="navbar navbar-expand-lg bg-navy-light shadow">
+        <div class="container d-flex justify-content-center">
+            <!-- Desktop Category Links -->
+            <ul class="navbar-nav d-none d-lg-flex gap-4">
+                {% for category in categories %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle category-link" href="#" id="categoryDropdown{{ category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ category.name }}
+                    </a>
+                    <ul class="dropdown-menu category-dropdown-menu" aria-labelledby="categoryDropdown{{ category.id }}">
+                        {% if category.subcategories.exists %}
+                          <li>
+                            <a class="dropdown-item category-dropdown-item fw-bold" href="{% url 'filter_products' %}?filters={{ category.name|urlencode }}">
+                              Toute catégorie
+                            </a>
+                          </li>
+                          <li><hr class="dropdown-divider"></li>
+                          {% for subcategory in category.subcategories.all %}
+                          <li>
+                            <a class="dropdown-item category-dropdown-item" href="{% url 'filter_products' %}?filters={{ subcategory.name|urlencode }}">
+                              {{ subcategory.name }}
+                            </a>
+                          </li>
+                          {% endfor %}
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- MOBILE MENU (Bootstrap Offcanvas) -->
+<div class="offcanvas offcanvas-start bg-white offcanvas-custom" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title text-navy-dark fw-bold" id="offcanvasNavbarLabel">Menu Aquatiako</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        
+        <!-- Mobile Search Bar -->
+        <form class="search-form mb-4" method="get" action="{% url 'filter_products' %}">
+            <input
+                class="form-control search-input"
+                type="search"
+                name="search"
+                placeholder="Rechercher des produits..."
+                aria-label="Search"
+            >
+            <button class="btn search-button" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        
+        <!-- --- Gemini API Feature: Search Inspiration --- -->
+        <h6 class="text-secondary fw-semibold mt-4 mb-3">Besoin d'inspiration ?</h6>
+        <div class="card p-3 mb-4 border-primary bg-light">
+            <p class="small text-muted mb-2">Décrivez votre envie (ex: "cadeau pour enfant passionné de nature") et laissez notre IA vous suggérer des termes de recherche précis.</p>
+            <div class="input-group mb-2">
+                <input type="text" id="inspiration-query" class="form-control form-control-sm" placeholder="Ex: poisson d'eau douce facile à élever..." aria-label="Query">
+                <button class="btn btn-primary btn-sm search-inspiration-btn" id="generate-inspiration-btn" type="button">
+                    ✨ Idées
+                    <span id="inspiration-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div id="inspiration-results" class="mt-2 small">
+                <!-- LLM results will go here -->
+            </div>
+        </div>
+        <!-- ----------------------------------------------- -->
+
+
+        <!-- Mobile Main Links -->
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mb-4">
+            <li class="nav-item border-top">
+                <a class="nav-link py-3 text-lg text-navy-dark" href="#"><i class="fas fa-user me-2"></i> Mon compte</a>
+            </li>
+            <li class="nav-item border-top border-bottom">
+                <a class="nav-link py-3 text-lg text-navy-dark" href="#"><i class="fas fa-shopping-basket me-2"></i> Mon panier</a>
+            </li>
+        </ul>
+        
+        <!-- Mobile Category Links (Accordion) -->
+        <h6 class="text-secondary fw-semibold mt-4 mb-3">Catégories de Produits</h6>
+        <div class="accordion accordion-flush" id="mobileCategoryAccordion">
+            {% for category in categories %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ category.id }}">
+                    <button class="accordion-button collapsed text-navy-dark fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ category.id }}" aria-expanded="false" aria-controls="collapse{{ category.id }}">
+                        {{ category.name }}
+                    </button>
+                </h2>
+                <div id="collapse{{ category.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ category.id }}" data-bs-parent="#mobileCategoryAccordion">
+                    <div class="accordion-body p-0">
+                        {% if category.subcategories.exists %}
+                            <a class="dropdown-item category-dropdown-item py-2 ps-4 fw-bold" href="{% url 'filter_products' %}?filters={{ category.name|urlencode }}">
+                                Toute catégorie
+                            </a>
+                            {% for subcategory in category.subcategories.all %}
+                            <a class="dropdown-item category-dropdown-item py-2 ps-4" href="{% url 'filter_products' %}?filters={{ subcategory.name|urlencode }}">
+                                {{ subcategory.name }}
+                            </a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+</div>
+
+<!-- Bootstrap JS Bundle (Required for Navbar/Offcanvas/Dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+    // --- Firebase/Auth Setup (Mandatory) ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Global variables (Mandatory setup)
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    let db = null;
+    let auth = null;
+
+    if (firebaseConfig) {
+        setLogLevel('Debug');
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        
+        // Auth logic
+        (async () => {
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log("Firebase signed in with custom token.");
+                } else {
+                    await signInAnonymously(auth);
+                    console.log("Firebase signed in anonymously.");
+                }
+            } catch (error) {
+                console.error("Firebase Auth Error:", error);
+            }
+        })();
+    } else {
+        console.error("Firebase configuration is missing. LLM feature may not work properly.");
+    }
+
+
+    // --- Gemini LLM Logic for Search Inspiration ---
+    const API_KEY = "";
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+
+    const generateInspiration = async (query) => {
+        const systemPrompt = "You are an e-commerce trend analyst for an aquatic supply store named Aquatiako, specializing in aquariums, fishing gear, pet fish, pond supplies, and water sports accessories. The user provides a vague request for products. Your task is to suggest 3 to 5 highly specific, comma-separated search terms or product categories that are relevant to their request and the store's niche. Respond ONLY with the comma-separated list of search terms. Do not include any introductory text, titles, or numbering. Example: 'kit d'aquarium pour débutant', 'leurres de pêche en eau douce', 'filtre submersible pour bassin'";
+        const userQuery = `User request: ${query}`;
+
+        const payload = {
+            contents: [{ parts: [{ text: userQuery }] }],
+            systemInstruction: {
+                parts: [{ text: systemPrompt }]
+            },
+        };
+
+        const maxRetries = 3;
+        let lastError = null;
+
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    // If response is not 2xx, throw error to trigger retry/catch
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    return text.trim();
+                } else {
+                    throw new Error("Invalid response structure or empty content from API.");
+                }
+
+            } catch (error) {
+                lastError = error;
+                console.warn(`Attempt ${attempt + 1} failed. Retrying in ${Math.pow(2, attempt)}s...`);
+                if (attempt < maxRetries - 1) {
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+                }
+            }
+        }
+        throw new Error(`Failed to generate content after ${maxRetries} attempts. Last error: ${lastError.message}`);
+    };
+
+    // --- UI and Event Handlers ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const generateBtn = document.getElementById('generate-inspiration-btn');
+        const inputField = document.getElementById('inspiration-query');
+        const resultsDiv = document.getElementById('inspiration-results');
+        const spinner = document.getElementById('inspiration-spinner');
+
+        if (!generateBtn || !inputField || !resultsDiv || !spinner) {
+            console.error("One or more LLM UI elements not found.");
+            return;
+        }
+
+        generateBtn.addEventListener('click', async () => {
+            const query = inputField.value.trim();
+            if (!query) {
+                resultsDiv.innerHTML = '<span class="text-danger">Veuillez entrer une demande.</span>';
+                return;
+            }
+
+            // Show loading state
+            spinner.classList.remove('d-none');
+            generateBtn.disabled = true;
+            resultsDiv.innerHTML = '<span class="text-primary">Génération des idées en cours...</span>';
+
+            try {
+                const resultText = await generateInspiration(query);
+                
+                // Convert comma-separated string into clickable links
+                const terms = resultText.split(',').map(term => term.trim()).filter(t => t.length > 0);
+                
+                let html = '<p class="fw-semibold mb-1">Suggestions de recherche :</p><div class="d-flex flex-wrap gap-2">';
+
+                terms.forEach(term => {
+                    const searchUrl = `/filter_products/?search=${encodeURIComponent(term)}`;
+                    // Use a slightly different color for suggested buttons
+                    html += `<a href="${searchUrl}" class="btn btn-outline-info btn-sm search-link">${term}</a>`;
+                });
+                html += '</div>';
+
+                resultsDiv.innerHTML = html;
+
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                resultsDiv.innerHTML = '<span class="text-danger">Erreur: Impossible de générer des idées. Veuillez vérifier la console pour les détails.</span>';
+            } finally {
+                // Hide loading state
+                spinner.classList.add('d-none');
+                generateBtn.disabled = false;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,55 @@
+{% extends 'backend/layout/base.html' %}
+
+{% block content %}
+
+<div>
+    {% if error %}
+    <p class="text-danger">{{error}}</p>
+    {% endif %}
+</div>
+
+<h1>Product Categories</h1>
+<hr>
+<div class="d-flex justify-content-between">
+    <p>Select product category to change</p>
+    <a href="{% url 'add_product_categ' %}">
+    <button type="submit" class="btn-classic btn-sm">
+        <i class="fa-solid fa-plus"></i> Add Product Category
+    </button>
+    </a>
+</div>
+
+
+<table class="mt-2">
+    <thead>
+        <tr>
+            <th>Product Category</th>
+            <th>Actions</th> </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="category-{{ category.id }}-check">
+                    <label class="form-check-label" for="category-{{ category.id }}-check">
+                        {{ category.name }}
+                    </label>
+                </div>
+            </td>
+            <td>
+                <a href="{% url 'edit_category_cat' category.id %}" class="btn-classic-action btn-edit">Edit</a>
+                <form method="post" action="{% url 'delete_category' category.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-classic-action btn-delete" 
+                            onclick="return confirm('Confirm deletion of category: {{ category.name }}?');">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

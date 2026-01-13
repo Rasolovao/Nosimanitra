@@ -1,0 +1,107 @@
+<style>
+.menu-item {
+    background-color: #c0c0c0;
+    border: 1px solid;
+    border-color: #f0f0f0 #808080 #808080 #f0f0f0;
+    margin-bottom: 2px;
+    font-family: "MS Sans Serif", "Arial", sans-serif;
+}
+
+.menu-link {
+    color: black;
+    text-decoration: none;
+    display: block;
+    padding: 5px 10px;
+}
+
+.menu-item.active {
+    background-color: #e0e0e0;
+    border-color: #808080 #f0f0f0 #f0f0f0 #808080;
+}
+
+.menu-sub {
+    list-style: none;
+    padding-left: 15px;
+    background-color: #c0c0c0;
+    border-top: 1px solid #808080;
+}
+
+.menu-sub .menu-item {
+    border: none;
+    margin-bottom: 0;
+}
+</style>
+          <!-- Dashboard -->
+          <li class="menu-item active">
+            <a href="index.html" class="menu-link d-flex">
+              <span class="menu-icon">⌂</span>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+
+          <!-- Account -->
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle d-flex">
+              <span class="menu-icon">⚙</span>
+              <div data-i18n="Account Settings">Account Settings</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="pages-account-settings-account.html" class="menu-link">
+                  <div data-i18n="Account">Account</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="pages-account-settings-notifications.html" class="menu-link">
+                  <div data-i18n="Notifications">Notifications</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="pages-account-settings-connections.html" class="menu-link">
+                  <div data-i18n="Connections">Connections</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Page Control -->
+          <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle d-flex">
+              <span class="menu-icon">🗏</span>
+              <div data-i18n="Page Control">Page Control</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item">
+                <a href="{% url 'product_categ' %}" class="menu-link">
+                  <div data-i18n="Error">Product Categories</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="{% url 'product_sub_categ' %}" class="menu-link">
+                  <div data-i18n="Under Maintenance">Product subcategories</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="{% url 'product'%}" class="menu-link">
+                  <div data-i18n="Under Maintenance">Products</div>
+                </a>
+              </li>
+              <li class="menu-item">
+                <a href="{% url 'main_carousel_control'%}" class="menu-link">
+                  <div data-i18n="Under Maintenance">Carousel</div>
+                </a>
+              </li>
+                <li class="menu-item">
+                <a href="{% url 'navbar_control'%}" class="menu-link">
+                  <div data-i18n="Under Maintenance">Navbar control</div>
+                </a>
+              </li>
+               </li>
+                <li class="menu-item">
+                <a href="{% url 'is_promotions_control'%}" class="menu-link">
+                  <div data-i18n="Under Maintenance">Promotions</div>
+                </a>
+              </li>
+
+
+              </ul> 

@@ -1,0 +1,39 @@
+{% extends 'backend/layout/base.html' %}
+
+{% block content %}
+<form action="{% url 'edit_subcategory' subcategory.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<h1>Product Subcategories</h1>
+<label for="subcategory-name">Subcategory Name:</label>
+<input type="text" id="subcategory-name" value="{{ subcategory.name }}" name="subcategory_name" required>
+<hr>
+<label for="category-name">Category:</label>
+<select id="category-name" name="category_name" required>
+        <option value="{{subcategory.category.id}}">{{subcategory.category.name}}</option>
+    {% for category in categories %}
+        {% if category.id != subcategory.category.id %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endif %}
+        
+    {% endfor %}
+</select>
+<hr>
+
+<div>
+    <button type="submit" class="btn-classic btn-sm">
+        <i class="fa-solid fa-plus"></i> Save Subcategory
+    </button>
+    <a href="{% url 'product_sub_categ' %}">
+    <button class="btn-classic btn-sm">
+        <i class="fa-solid fa-plus"></i> Cancel 
+    </button>
+    </a>
+</div>
+
+</form>
+{% if error %}
+    <div style="padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px; margin-bottom: 15px;">
+        <strong>Error:</strong> {{ error }}
+    </div>
+{% endif %}
+{% endblock %}

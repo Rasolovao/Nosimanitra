@@ -1,0 +1,118 @@
+/* Custom CSS for the "Classic" Button */
+.btn-classic {
+    /* Base Button Styling */
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    
+    /* Classic Look - Color and Border */
+    color: #333; /* Dark text */
+    background: linear-gradient(to bottom, #f9f9f9 0%, #e0e0e0 100%); /* Subtle gradient */
+    border: 1px solid #aaa; /* Defined border */
+    border-radius: 4px; /* Slightly rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Soft shadow for lift */
+    
+    /* Remove default button appearance */
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.1s ease; /* Smooth hover transition */
+}
+
+/* Hover Effect */
+.btn-classic:hover {
+    background: linear-gradient(to bottom, #fff 0%, #e8e8e8 100%);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Active/Clicked Effect (The "Press" Effect) */
+.btn-classic:active {
+    background: #d0d0d0; /* Flat, dark background when pressed */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4); /* Inner shadow for pressed look */
+    transform: translateY(1px); /* Move button down slightly */
+}
+
+
+/* --- Global Table Style: Classic Grid --- */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Essential for a clean, classic grid look */
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for lift */
+}
+
+th, td {
+    border: 1px solid #ccc; /* Solid gray border */
+    padding: 12px 15px;
+    text-align: left;
+}
+
+thead th {
+    background-color: #e9ecef; /* Light gray header */
+    color: #333;
+    font-weight: bold;
+    border-bottom: 2px solid #aaa; /* Stronger line under header */
+}
+
+/* Optional: Zebra stripes for readability */
+tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Very light gray for even rows */
+}
+
+/* --- Action Button Styles: Classic 3D Look --- */
+
+/* Base button style */
+.btn-classic-action {
+    padding: 6px 12px;
+    margin-right: 5px;
+    border-radius: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 0 #999; /* Shadow underneath for 3D effect */
+    border: 1px solid #777;
+    transition: all 0.05s;
+}
+
+/* Edit Button (Light Blue/Gray) */
+.btn-edit {
+    color: #333;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    box-shadow: 0 2px 0 #89a3a7;
+}
+
+/* Delete Button (Red) */
+.btn-delete {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #c82333;
+    box-shadow: 0 2px 0 #a0202d;
+}
+
+/* Pressed Effect (Make it sink) */
+.btn-classic-action:active {
+    box-shadow: 0 0 0 #999; /* Remove shadow */
+    transform: translateY(2px); /* Push button down */
+}
+
+
+/* In your styles.css file */
+/* Target the second column (Actions) of the table */
+table th:nth-child(2),
+table td:nth-child(2) {
+    /* Set a width small enough for the buttons */
+    width: 150px; /* Adjust this value (e.g., 120px to 180px) as needed */
+    /* Ensure content doesn't wrap unnecessarily */
+    white-space: nowrap; 
+}
+
+/* Optional: Make the buttons closer together */
+.btn-classic-action {
+    /* Reduce the margin between buttons */
+    margin-right: 2px;
+}

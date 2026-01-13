@@ -1,0 +1,58 @@
+{% extends 'backend/layout/base.html' %}
+
+{% block content %}
+<form action="{% url 'add_main_carousel' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<hr>
+
+    <div class="form-group">
+        <label for="image">Image:</label>
+        <input type="file" class="form-control-file" id="image1" name="image1" accept="image/*" required>
+        <img id="preview1" src="#" alt="Image Preview" style="max-width: 200px; margin-top: 10px; display: none;" />
+    </div>
+    <div class="form-group mb-3">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+
+
+<hr>
+
+<div>
+    <button type="submit" class="btn-classic btn-sm">
+        <i class="fa-solid fa-plus"></i> Save 
+    </button>
+    <a href="{% url 'main_carousel_control' %}">
+    <button type="button" class="btn-classic btn-sm btn-red ms-2">
+        <i class="fa-solid fa-xmark"></i> Cancel 
+    </button>
+    </a>
+</div>
+
+{% if error %}
+    <div style="padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px; margin-bottom: 15px;">
+        <strong>Error:</strong> {{ error }}
+    </div>
+{% endif %}
+
+<script>
+    document.getElementById('image1').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('preview1');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    });
+</script>
+
+
+ </form>
+{% endblock %}

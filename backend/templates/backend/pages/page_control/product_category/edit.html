@@ -1,0 +1,25 @@
+{% extends 'backend/layout/base.html' %}
+
+{% block content %}
+    <h1>Edit Product Categories</h1>
+
+    <form method="post" action="{% url 'edit_category_cat' category.id %}">
+        
+        {% csrf_token %} 
+        
+        <label for="category-name">Category Name:</label>
+        <input type="text" id="category-name" value="{{category.name}}" name="category_name" required>
+        
+        <hr>
+        
+        <div>
+            <button type="submit" class="btn-classic btn-sm">
+                <i class="fa-solid fa-plus"></i> Update Category
+            </button>
+            
+            <a href="{% url 'product_categ' %}" class="btn-classic btn-sm" style="text-decoration: none;">
+                <i class="fa-solid fa-xmark"></i> Cancel 
+            </a>
+            </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,82 @@
+<style>
+    .bg-navy {
+        background-color: #033d76 !important;
+    }
+    .bg-navy-light {
+        background-color: #0366c9 !important;
+    }
+</style>
+
+<!-- TOP BAR -->
+ 
+<!-- TOP BAR -->
+<div class="bg-navy text-white">
+  <div class="container d-flex justify-content-between align-items-center py-2">
+    <small>
+      Livraison gratuite à Madagascar pour toutes les commandes | Découvrez notre nouveau programme de fidélité !
+    </small>
+    <div class="d-flex">
+      <a href="#" class="text-decoration-none text-white me-3"><small>Inscrivez-vous</small></a>
+      <a href="#" class="text-decoration-none text-white me-3"><small>Récompenses</small></a>
+      <a href="#" class="text-decoration-none text-white"><small>Contactez-nous</small></a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-navy">
+  <div class="container">
+    <a class="navbar-brand" href="#">Aquatiako</a>
+    <div class="mx-auto w-50">
+      <form class="d-flex" method="get" action="{% url 'filter_products' %}">
+        <input class="form-control me-2" type="search" name="search" placeholder="Rechercher des produits..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Rechercher</button>
+      </form>
+    </div>
+    <ul class="navbar-nav ms-auto d-flex flex-row">
+      <li class="nav-item me-3">
+        <a class="nav-link" href="#"><i class="fas fa-user"></i> Mon compte</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="fas fa-shopping-basket"></i> Mon panier</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- CATEGORY NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-navy-light">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#categoryNav" aria-controls="categoryNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="categoryNav">
+      <ul class="navbar-nav">
+        {% for category in categories %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown{{ category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ category.name }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="categoryDropdown{{ category.id }}">
+            {% if category.subcategories.exists %}
+              <li>
+                <a class="dropdown-item fw-bold" href="{% url 'filter_products' %}?filters={{ category.name|urlencode }}">
+                  Toute catégorie
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              {% for subcategory in category.subcategories.all %}
+              <li>
+                <a class="dropdown-item" href="{% url 'filter_products' %}?filters={{ subcategory.name|urlencode }}">
+                  {{ subcategory.name }}
+                </a>
+              </li>
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>

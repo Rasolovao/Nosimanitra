@@ -1,0 +1,236 @@
+{% extends 'client/base.html' %}
+
+{% block content %}
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token }}">
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('filterComponent', () => ({
+      options: [],
+      selected: [],
+      response: '',
+      searchTerm: '',
+
+      toggle(sub, category) {
+        const allSubs = category.subcategories.filter(s => s.name !== 'All');
+        const allCheckbox = category.subcategories.find(s => s.name === 'All');
+
+        if (sub.name === 'All') {
+          const allSelected = allSubs.every(s => this.selected.includes(s.name));
+
+          if (allSelected) {
+            this.selected = this.selected.filter(name => !allSubs.map(s => s.name).includes(name));
+            allSubs.forEach(s => s.checked = false);
+            allCheckbox.checked = false;
+          } else {
+            allSubs.forEach(s => {
+              if (!this.selected.includes(s.name)) {
+                this.selected.push(s.name);
+              }
+              s.checked = true;
+            });
+            allCheckbox.checked = true;
+          }
+        } else {
+          if (this.selected.includes(sub.name)) {
+            this.selected = this.selected.filter(i => i !== sub.name);
+            sub.checked = false;
+          } else {
+            this.selected.push(sub.name);
+            sub.checked = true;
+          }
+
+          const allSelected = allSubs.every(s => this.selected.includes(s.name));
+          allCheckbox.checked = allSelected;
+
+          if (!allSelected && this.selected.includes('All')) {
+            this.selected = this.selected.filter(i => i !== 'All');
+          }
+        }
+
+        this.sendFilters(); 
+      },
+
+      clearFilters() {
+        this.selected = [];
+        this.searchTerm = '';
+        this.options.forEach(category => {
+          category.subcategories.forEach(sub => sub.checked = false);
+          const all = category.subcategories.find(s => s.name === 'All');
+          if (all) all.checked = false;
+        });
+
+        history.pushState({}, '', window.location.pathname);
+        this.fetchProducts();
+      },
+
+      sendFilters() {
+        const params = new URLSearchParams();
+        if (this.selected.length > 0) {
+          params.set('filters', this.selected.join(','));
+        }
+        if (this.searchTerm) {
+          params.set('search', this.searchTerm);
+        }
+
+        const newUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname;
+        history.pushState({}, '', newUrl);
+
+        this.fetchProducts();
+      },
+
+      async fetchProducts() {
+        try {
+            const params = new URLSearchParams();
+            if (this.selected.length > 0) {
+                params.set('filters', this.selected.join(','));
+            }
+            if (this.searchTerm) {
+                params.set('search', this.searchTerm);
+            }
+    
+            // Use GET and query params for all product fetching
+            const res = await fetch(`/api/filter-products/?${params.toString()}`);
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            const data = await res.json();
+            console.log('products', data);
+            this.response = data;
+        } catch (error) {
+            console.error('Failed to fetch products:', error);
+            alert('Something went wrong while fetching products.');
+        }
+    },
+    
+
+      async loadCategories() {
+        try {
+          const categoryRes = await fetch('/api/categories-with-subcategories/');
+          if (!categoryRes.ok) throw new Error(`HTTP error! Status: ${categoryRes.status}`);
+          const categoryData = await categoryRes.json();
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const selectedFilters = urlParams.get('filters')?.split(',') || [];
+          this.searchTerm = urlParams.get('search') || '';
+
+          this.options = categoryData.map(category => {
+            const subcategories = [
+              { id: `all-${category.id}`, name: 'All', checked: false },
+              ...category.subcategories.map(sub => ({
+                ...sub,
+                checked: selectedFilters.includes(sub.name)
+              }))
+            ];
+
+            const allSubs = subcategories.filter(s => s.name !== 'All');
+            const allSelected = allSubs.every(s => s.checked);
+            subcategories.find(s => s.name === 'All').checked = allSelected;
+
+            return {
+              ...category,
+              open: false,
+              subcategories
+            };
+          });
+
+          this.selected = selectedFilters;
+          this.fetchProducts();
+        } catch (error) {
+          console.error('Failed to load categories or products:', error);
+          alert('Something went wrong while loading the page.');
+        }
+      }
+    }));
+  });
+</script>
+
+<div class="container mt-4" x-data="filterComponent" x-init="loadCategories()">
+  <div class="row">
+    <div class="col-md-4">
+      <h1>Catégorie</h1>
+      <hr>
+      
+
+      <template x-for="category in options" :key="category.id">
+        <div class="mb-3">
+          <div @click="category.open = !category.open"
+               class="d-flex justify-content-between align-items-center p-2 bg-light border rounded"
+               style="cursor: pointer;">
+            <span x-text="category.name"></span>
+            <i class="fas fa-chevron-down" :class="{ 'fa-rotate-180': category.open }"></i>
+          </div>
+
+          <ul x-show="category.open" class="list-group mt-2">
+            <template x-for="sub in category.subcategories" :key="sub.id">
+              <li class="list-group-item" :class="{ 'fw-bold': sub.name === 'All' }">
+                <input type="checkbox"
+                       :value="sub.name"
+                       :id="sub.id"
+                       class="form-check-input me-1"
+                       :checked="sub.checked"
+                       @change="toggle(sub, category)">
+                <label class="form-check-label" :for="sub.id" x-text="sub.name"></label>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </template>
+
+      <!-- Clear filters button placed at the bottom of the filter control -->
+      <div class="mt-3">
+        <button class="btn btn-sm btn-outline-secondary w-100" x-show="selected.length > 0" @click="clearFilters()" x-cloak>
+          <div class="d-flex justify-content-between align-items-center"> 
+               Effacer les filtres
+              <i class="fas fa-times me-1"></i>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <h2>Produits</h2>
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Rechercher des produits..." x-model="searchTerm" @input.debounce.300ms="sendFilters()">
+      </div>
+      <h5 class="mt-3" x-show="selected.length > 0">
+        Filtres sélectionnés: <span x-text="selected.join(', ')"></span>
+      </h5>
+
+      <div class="row mt-3">
+        <template x-for="product in response" :key="product.id">
+          <div class="col-md-4 mb-4">
+            <div class="card h-100" hx-target="this" hx-swap="outerHTML">
+              <img :src="product.images.length > 0 ? product.images[0].image : 'https://via.placeholder.com/100x100'" class="card-img-top" alt="Product Image">
+
+              <div class="card-body d-flex flex-column">
+                <h6 class="card-title" x-text="product.name"></h6>
+                <p class="card-text small mb-1">
+                  <strong>Price:</strong> $<span x-text="product.price"></span>
+                </p>
+                <div class="mt-auto d-flex justify-content-between align-items-center flex-wrap">
+                  <div class="input-group input-group-sm" style="max-width: 90px;">
+                    <button class="btn btn-outline-secondary btn-sm"
+                            :hx-post="'/cart/update/' + product.id"
+                            hx-vals='{"quantity": 0}'>-</button>
+                    <input type="text" class="form-control text-center" value="1" readonly>
+                    <button class="btn btn-outline-secondary btn-sm"
+                            :hx-post="'/cart/update/' + product.id"
+                            hx-vals='{"quantity": 2}'>+</button>
+                  </div>
+                  <a :href="'/product/' + product.id"
+                     class="btn btn-primary btn-sm"
+                     :hx-post="'/cart/add/' + product.id"
+                     hx-target="#cart-count"
+                     hx-swap="innerHTML">
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
